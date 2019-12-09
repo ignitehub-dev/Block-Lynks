@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="container">
+      <hr />
+      Enter A Passphrase
+      <div class="col-sm-10">
+        <textarea
+          style="font-size: 14pt"
+          id="longpassphrase"
+          rows="2"
+          placeholder="Enter long passphrase"
+        ></textarea>
+      </div>
+      <button onclick="getbip39seeds()">Click me</button>
+    </div>
+    <hr />
+
+    Generated Seed: <span id="seedphrasedisplay"></span> <br />
+    <br />
+    <div class="col-md-12">
+      Adapted from :
+      <a href="https://github.com/armorybrainwallet/brain2bip"
+        >https://github.com/armorybrainwallet/brain2bip</a
+      >
+    </div>
+
+    <script src="js/sjcl-bip39.js"></script>
+    <script src="js/wordlist_english.js"></script>
+    <script src="js/jsbip39.js"></script>
+    <script src="js/biginteger.js"></script>
+    <script src="js/entropy.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>
