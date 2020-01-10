@@ -1,5 +1,5 @@
-WORDLISTS = typeof WORDLISTS == "undefined" ? {} : WORDLISTS;
-WORDLISTS["english"] = [
+words = typeof words == "undefined" ? {} : words;
+words["english"] = [
   "abandon",
   "ability",
   "able",
@@ -2050,6 +2050,6 @@ WORDLISTS["english"] = [
   "zoo"
 ];
 
-module.exports = {
-  WORDLISTS: WORDLISTS
-};
+// module.exports = {
+//   WORDLISTS: WORDLISTS
+// };

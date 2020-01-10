@@ -1,20 +1,20 @@
 // import local modules.
-let jsbip39 = require("./jsbip39.js");
-let sjcl = require("./sjcl-bip39.js");
-let ent = require("./entropy.js");
-let bigint = require("./biginteger.js");
+// let jsbip39 = require("./jsbip39.js");
+// let sjcl = require("./sjcl-bip39.js");
+// let ent = require("./entropy.js");
+// let bigint = require("./biginteger.js");
 
 function getbip39seeds(value) {
   let phrase;
   let entropyValue;
 
   // setting seed language
-  let mnemonics = { english: new jsbip39.Mnemonic("english") };
+  let mnemonics = { english: new Mnemonic("english") };
   let mnemonic = mnemonics["english"];
 
   function longpassphraseChanged() {
-    let hash = sjcl.sjcl.hash.sha256.hash(value);
-    let hex = sjcl.sjcl.codec.hex.fromBits(hash);
+    let hash = sjcl.hash.sha256.hash(value);
+    let hex = sjcl.codec.hex.fromBits(hash);
     entropyValue = hex;
     setMnemonicFromEntropy();
   }
@@ -23,7 +23,7 @@ function getbip39seeds(value) {
     // Get entropy value
     let entropyStr = entropyValue;
     // Work out minimum base for entropy
-    let entropy = ent.Entropy.fromString(entropyStr);
+    let entropy = Entropy.fromString(entropyStr);
     if (entropy.binaryStr.length == 0) {
       return;
     }
@@ -33,9 +33,9 @@ function getbip39seeds(value) {
     let mnemonicLength = 12;
     if (mnemonicLength != "raw") {
       // Get bits by hashing entropy with SHA256
-      let hash = sjcl.sjcl.hash.sha256.hash(entropy.cleanStr);
-      let hex = sjcl.sjcl.codec.hex.fromBits(hash);
-      bits = bigint.BigInteger.parse(hex, 16).toString(2);
+      let hash = sjcl.hash.sha256.hash(entropy.cleanStr);
+      let hex = sjcl.codec.hex.fromBits(hash);
+      bits = BigInteger.parse(hex, 16).toString(2);
       while (bits.length % 256 != 0) {
         bits = "0" + bits;
       }
@@ -64,7 +64,7 @@ function getbip39seeds(value) {
   return phrase;
 }
 
-// exports
-module.exports = {
-  getbip39seeds: getbip39seeds
-};
+// // exports
+// module.exports = {
+//   getbip39seeds: getbip39seeds
+// };

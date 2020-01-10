@@ -1,4 +1,6 @@
 const ethers = require("ethers");
+// var ethers = import("ethers")
+// import * as ethers from "ethers";
 
 let mnemonicWallet = ethers.Wallet.fromMnemonic(
   "blame stumble network chapter sunny cherry lecture collect quiz aim trip junk"

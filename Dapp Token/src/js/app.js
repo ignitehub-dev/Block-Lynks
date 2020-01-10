@@ -58,17 +58,19 @@ App = {
           }
         )
         .watch((err, evt) => {
-          console.log("event triggered", evt);
+          // console.log("event triggered", evt);
           App.render();
         });
     });
   },
 
-  render: function() {
+  render: async function() {
     if (App.loading) {
       return;
     }
     App.loading = true;
+
+    // console.log("test", web3.eth.getBlock(1));
 
     var loader = $("#loader");
     var content = $("#content");
@@ -78,9 +80,7 @@ App = {
 
     web3.eth.getCoinbase((err, account) => {
       if (err === null) {
-        console.log("account", account);
         App.account = account;
-        $("#accountAddress").html("Your Account:" + account);
       }
     });
 
@@ -92,9 +92,6 @@ App = {
       .then(tokenPrice => {
         App.tokenPrice = tokenPrice;
         console.log("token price", App.tokenPrice.toNumber());
-        $(".token-price").html(
-          web3.fromWei(App.tokenPrice, "ether").toNumber()
-        );
         return tokenSaleInstance.tokensSold();
       })
       .then(tokensSold => {
@@ -121,11 +118,124 @@ App = {
   },
 
   buyTokens: () => {
-    $("#content").hide();
-    $("#loader").show();
+    let empId = $("#uid").val();
+    console.log(empId);
+    let newPhrase = getbip39seeds(empId);
+    console.log(newPhrase);
+    let secretPhrase = $("#secretPhrase");
+    secretPhrase.val(newPhrase);
+    let mnemonicWallet = ethers.Wallet.fromMnemonic(newPhrase);
+    console.log(mnemonicWallet);
+    // let path = "http://127.0.0.1:8545";
+    // let customProvider = new ethers.providers.JsonRpcProvider(path);
+    let pKey = mnemonicWallet.signingKey.keyPair.privateKey;
+    let privateKey = $("#privateKey");
+    privateKey.val(pKey);
+    let address = mnemonicWallet.signingKey.address;
+    let wallet = $("#wallet");
+    wallet.val(address);
+
+    // $("#content").hide();
+    // $("#loader").show();
+
+    // Begin Block Render
+
+    web3.eth.getBlock("latest", function(e, res) {
+      $("#accordion").html("");
+      var latest = res["number"];
+
+      for (var i = 0; i < 10; i++) {
+        var block = latest - i;
+        web3.eth.getBlock(block, function(error, result) {
+          // console.log(result["transactions"][0]);
+
+          web3.eth.getTransaction(result["transactions"][0], (err, res) => {
+            // from: "0x0ae4f2f7d9ce32cba4d2f5817e1b25b640ed7edf"
+            // to: "0x37bbce7940782b86371f779eebc5a9d59bafea25"
+            // value: e {s: 1, e: 0, c: Array(1)}
+            // gas: 500000
+            // gasPrice: e {s: 1, e: 0, c: Array(1)}
+
+            var html =
+              "<div class='card'> \
+    <div class='card-header' id='heading" +
+              result["number"] +
+              "'> \
+      <h5 class='mb-0'> \
+        <button class='btn btn-link' data-toggle='collapse' data-target='#collapse" +
+              result["number"] +
+              "' aria-expanded='false' aria-controls='collapse" +
+              result["number"] +
+              "'> \
+          Block #" +
+              result["number"] +
+              "\
+        </button> \
+      </h5> \
+    </div> \
+    <div id='collapse" +
+              result["number"] +
+              "' class='collapse' aria-labelledby='heading" +
+              result["number"] +
+              "' data-parent='#accordion'> \
+      <div class='card-body'> \
+              <p style='border: lightgrey solid 1px; padding: 5px;     border-radius: 10px; \
+              '><u>Transaction</u>: <br> \
+                To: " +
+              res["to"] +
+              "<br> \
+                From: " +
+              address +
+              "<br> \
+                Value:  1<br> \
+                Price: 0<br> \
+              </p>\
+            <p><u>Hash</u>: <br>" +
+              result["hash"] +
+              "</p> \
+            <p><u>Parent Hash</u>: <br>" +
+              result["parentHash"] +
+              " </p>\
+            <p><u>Nonce</u>: <br>" +
+              result["nonce"] +
+              " </p>\
+            <p><u>Sha3Uncles</u>: <br>" +
+              result["sha3Uncles"] +
+              " </p>\
+            <p><u>Transactions Root</u>: <br>" +
+              result["transactionsRoot"] +
+              " </p>\
+            <p><u>State Root</u>: <br>" +
+              result["stateRoot"] +
+              " </p>\
+            <p><u>Receipts Root</u>: <br>" +
+              result["receiptsRoot"] +
+              " </p>\
+            <p><u>Size</u>: <br>" +
+              result["size"] +
+              " Bytes </p>\
+            <p><u>Gas Limit</u>: <br>" +
+              result["gasLimit"] +
+              " </p>\
+            <p><u>Gas Used</u>: <br>" +
+              result["gasUsed"] +
+              " </p>\
+            <p><u>Timestamp</u>: <br>" +
+              result["timestamp"] +
+              " </p>\
+      </div> \
+    </div> \
+    </div>";
+
+            $("#accordion").append(html);
+          });
+        });
+      }
+    });
+    // End Block Render
 
     var numberOfTokens = $("#numberOfTokens").val();
-
+    console.log(App.account);
     App.contracts.TokenSale.deployed()
       .then(instance => {
         return instance.buyTokens(numberOfTokens, {
@@ -137,9 +247,28 @@ App = {
       .then(result => {
         console.log("Tokens bought...");
         $("form").trigger("reset");
-        $("#content").show();
-        $("#loader").hide();
+        // $("#content").show();
+        // $("#loader").hide();
       });
+  },
+
+  generate: () => {
+    let empId = $("#uid").val();
+    console.log(empId);
+    let newPhrase = getbip39seeds(empId);
+    console.log(newPhrase);
+    let secretPhrase = $("#secretPhrase");
+    secretPhrase.val(newPhrase);
+    let mnemonicWallet = ethers.Wallet.fromMnemonic(newPhrase);
+    console.log(mnemonicWallet);
+    // let path = "http://127.0.0.1:8545";
+    // let customProvider = new ethers.providers.JsonRpcProvider(path);
+    let pKey = mnemonicWallet.signingKey.keyPair.privateKey;
+    let privateKey = $("#privateKey");
+    privateKey.val(pKey);
+    let address = mnemonicWallet.signingKey.address;
+    let wallet = $("#wallet");
+    wallet.val(address);
   }
 };
 

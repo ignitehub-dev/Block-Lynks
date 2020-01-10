@@ -26,8 +26,8 @@
  * https://github.com/bitwiseshiftleft/sjcl
  */
 
-var words = require("./wordlist_english.js");
-var sjcl = require("./sjcl-bip39.js");
+// var words = require("./wordlist_english.js");
+// var sjcl = require("./sjcl-bip39.js");
 
 var Mnemonic = function(language) {
   var PBKDF2_ROUNDS = 2048;
@@ -44,7 +44,7 @@ var Mnemonic = function(language) {
   };
 
   function init() {
-    wordlist = words.WORDLISTS[language];
+    wordlist = words[language];
     if (wordlist.length != RADIX) {
       err =
         "Wordlist should contain " +
@@ -82,8 +82,8 @@ var Mnemonic = function(language) {
 
     //h = hashlib.sha256(data).hexdigest()
     var data = byteArrayToWordArray(byteArray);
-    var hash = sjcl.sjcl.hash.sha256.hash(data);
-    var h = sjcl.sjcl.codec.hex.fromBits(hash);
+    var hash = sjcl.hash.sha256.hash(data);
+    var h = sjcl.codec.hex.fromBits(hash);
 
     // b is a binary string, eg '00111010101100...'
     //b = bin(int(binascii.hexlify(data), 16))[2:].zfill(len(data) * 8) + \
@@ -239,6 +239,7 @@ var Mnemonic = function(language) {
 
   init();
 };
-module.exports = {
-  Mnemonic: Mnemonic
-};
+
+// module.exports = {
+//   Mnemonic: Mnemonic
+// };

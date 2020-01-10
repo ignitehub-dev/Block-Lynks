@@ -14,10 +14,10 @@
  * entropy.
  */
 
-var bigint = require("./biginteger.js");
+// var BigInteger = require("./biginteger.js");
 
 Entropy = new (function() {
-  var TWO = new bigint.BigInteger(2);
+  var TWO = new BigInteger(2);
 
   // matchers returns an array of the matched events for each type of entropy.
   // eg
@@ -103,11 +103,11 @@ Entropy = new (function() {
     // Convert base.ints to BigInteger.
     // Due to using unusual bases, eg cards of base52, this is not as simple as
     // using BigInteger.parse()
-    var entropyInt = bigint.BigInteger.ZERO;
+    var entropyInt = BigInteger.ZERO;
     for (var i = base.ints.length - 1; i >= 0; i--) {
-      var thisInt = bigint.BigInteger.parse(base.ints[i]);
+      var thisInt = BigInteger.parse(base.ints[i]);
       var power = base.ints.length - 1 - i;
-      var additionalEntropy = bigint.BigInteger.parse(base.asInt)
+      var additionalEntropy = BigInteger.parse(base.asInt)
         .pow(power)
         .multiply(thisInt);
       entropyInt = entropyInt.add(additionalEntropy);
@@ -371,6 +371,6 @@ Entropy = new (function() {
   }
 })();
 
-module.exports = {
-  Entropy: Entropy
-};
+// module.exports = {
+//   Entropy: Entropy
+// };

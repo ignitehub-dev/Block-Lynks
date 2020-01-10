@@ -4269,12 +4269,12 @@
         }
       },
       "links": {},
-      "address": "0x004ae83096eb39Fa55AEC3486fC9ea7281a4748C",
-      "transactionHash": "0xbbf3af53a024d4402899b3c5faa4fc495d117474a8f101ccb43e4ae189a809b5"
+      "address": "0x37BBce7940782B86371F779EEbC5a9D59baFeA25",
+      "transactionHash": "0x076322c2ae8f81c7fd2c99cadae7f8596e2a02f4d32edcc586bcb47c1cf4b65c"
     }
   },
   "schemaVersion": "3.0.19",
-  "updatedAt": "2019-12-09T16:15:43.911Z",
+  "updatedAt": "2020-01-10T15:32:10.311Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

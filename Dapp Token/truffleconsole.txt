@@ -1,0 +1,5 @@
+TokenSale.deployed().then(function(i){tokenSale=i;})
+Token.deployed().then(function(i){token=i;})
+tokensAvailable = 750000000
+admin = accounts[0]
+token.transfer(tokenSale.address, tokensAvailable, {from: admin})
